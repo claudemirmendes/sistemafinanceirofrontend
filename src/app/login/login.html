@@ -1,0 +1,29 @@
+<div class="login-container">
+  <form (ngSubmit)="login()" class="login-form" #loginForm="ngForm" novalidate>
+    <h2>Login</h2>
+
+    <label for="username">Usuário</label>
+    <input
+      type="text"
+      id="username"
+      name="username"
+      [(ngModel)]="username"
+      required
+      placeholder="Digite seu usuário"
+      autocomplete="username"
+    />
+
+    <label for="password">Senha</label>
+    <input
+      type="password"
+      id="password"
+      name="password"
+      [(ngModel)]="password"
+      required
+      placeholder="Digite sua senha"
+      autocomplete="current-password"
+    />
+
+    <button type="submit" [disabled]="loginForm.invalid">Entrar</button>
+  </form>
+</div>

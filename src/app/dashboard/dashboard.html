@@ -1,0 +1,86 @@
+<header class="header">
+  <h1>Despesas e Receitas</h1>
+  <div class="actions">
+    <button (click)="abrirModal()">Nova Receita</button>
+    <button (click)="abrirModalDespesa()">Nova Despesa</button>
+    <button (click)="logout()">Logout</button>
+  </div>
+</header>
+
+<div class="table-container">
+  <table>
+    <thead>
+      <tr>
+        <th>Tipo</th>
+        <th>Valor</th>
+        <th>Descrição</th>
+        <th>Data Prevista Recebimento</th>
+        <th>Data Recebida</th>
+        <th>Confirmada</th>
+        <th>Data Vencimento</th>
+        <th>Data Pagamento</th>
+        <th>Paga</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let t of transacoes">
+        <td>{{ t.tipo }}</td>
+        <td>{{ t.valor | currency:'BRL' }}</td>
+        <td>{{ t.descricao }}</td>
+        <td>{{ t.dataPrevistaRecebimento }}</td>
+        <td>{{ t.dataRecebida }}</td>
+        <td>{{ t.confirmada ? 'Sim' : 'Não' }}</td>
+        <td>{{ t.dataVencimento }}</td>
+        <td>{{ t.dataPagamento }}</td>
+        <td>{{ t.paga ? 'Sim' : 'Não' }}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- Modal de Nova Receita -->
+<div *ngIf="mostrarModal" class="modal-overlay">
+  <div class="modal-content">
+    <h2>Nova Receita</h2>
+    <form (ngSubmit)="salvarReceita()">
+      <label for="descricao">Descrição:</label>
+      <input type="text" id="descricao" name="descricao" [(ngModel)]="novaReceita.descricao" required />
+
+      <label for="valor">Valor:</label>
+      <input type="number" id="valor" name="valor" [(ngModel)]="novaReceita.valor" required />
+
+      <label for="data">Data Prevista de Recebimento:</label>
+      <input type="date" id="data" name="dataPrevistaRecebimento" [(ngModel)]="novaReceita.dataPrevistaRecebimento" required />
+
+      <div class="modal-actions">
+        <button type="submit">Salvar</button>
+        <button type="button" (click)="fecharModal()">Cancelar</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Modal de Nova Despesa -->
+<div *ngIf="mostrarModalDespesa" class="modal-overlay">
+  <div class="modal-content">
+    <h2>Nova Despesa</h2>
+    <form (ngSubmit)="salvarDespesa()">
+      <label for="descricaoDespesa">Descrição:</label>
+      <input type="text" id="descricaoDespesa" name="descricaoDespesa" [(ngModel)]="novaDespesa.descricao" required />
+
+      <label for="valorDespesa">Valor:</label>
+      <input type="number" id="valorDespesa" name="valorDespesa" [(ngModel)]="novaDespesa.valor" required />
+
+      <label for="dataVencimento">Data de Vencimento:</label>
+      <input type="date" id="dataVencimento" name="dataVencimento" [(ngModel)]="novaDespesa.dataVencimento" required />
+
+      <label for="paga">Paga:</label>
+      <input type="checkbox" id="paga" name="paga" [(ngModel)]="novaDespesa.paga" />
+
+      <div class="modal-actions">
+        <button type="submit">Salvar</button>
+        <button type="button" (click)="fecharModalDespesa()">Cancelar</button>
+      </div>
+    </form>
+  </div>
+</div>

@@ -1,12 +1,12 @@
-import { Component, signal } from '@angular/core';
+import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet],
-  templateUrl: './app.html',
-  styleUrl: './app.scss'
+  standalone: true,
+  imports: [RouterOutlet], // importa só o outlet para o router funcionar
+  template: `
+    <router-outlet></router-outlet>
+  `
 })
-export class App {
-  protected readonly title = signal('sistemafinanceirofrontend');
-}
+export class App {}
