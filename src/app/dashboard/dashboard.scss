@@ -140,3 +140,66 @@
     }
   }
 }
+
+/* Botão Confirmar Pagamento (despesas) */
+.btn-confirmar-pagamento {
+  background-color: #e67e22;
+  color: white;
+  border: none;
+  padding: 6px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.3s;
+}
+
+.btn-confirmar-pagamento:hover {
+  background-color: #d35400;
+}
+
+/* Ícone do botão */
+.btn-confirmar-pagamento i {
+  pointer-events: none;
+}
+
+/* Botão Confirmar Recebimento (receitas) */
+.btn-confirmar-recebimento {
+  background-color: #27ae60;
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 18px;
+  transition: background-color 0.3s;
+}
+
+.btn-confirmar-recebimento:hover {
+  background-color: #1e8449;
+}
+
+
+.btn-editar {
+  background-color: #f39c12; /* Laranja */
+  border: none;
+  color: white;
+  padding: 8px 14px;
+  font-size: 14px;
+  border-radius: 5px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: background-color 0.3s ease;
+}
+
+.btn-editar i {
+  font-size: 16px;
+}
+
+.btn-editar:hover {
+  background-color: #d78c0c; /* Laranja escuro no hover */
+}
+
+
+

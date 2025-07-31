@@ -20,20 +20,51 @@
         <th>Data Vencimento</th>
         <th>Data Pagamento</th>
         <th>Paga</th>
+        <th>Ações</th>
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let t of transacoes">
-        <td>{{ t.tipo }}</td>
-        <td>{{ t.valor | currency:'BRL' }}</td>
-        <td>{{ t.descricao }}</td>
-        <td>{{ t.dataPrevistaRecebimento }}</td>
-        <td>{{ t.dataRecebida }}</td>
-        <td>{{ t.confirmada ? 'Sim' : 'Não' }}</td>
-        <td>{{ t.dataVencimento }}</td>
-        <td>{{ t.dataPagamento }}</td>
-        <td>{{ t.paga ? 'Sim' : 'Não' }}</td>
-      </tr>
+<tr *ngFor="let t of transacoes">
+  <td>{{ t.tipo }}</td>
+  <td>{{ t.valor | currency:'BRL' }}</td>
+  <td>{{ t.descricao }}</td>
+  <td>{{ t.dataPrevistaRecebimento }}</td>
+  <td>{{ t.dataRecebida }}</td>
+  <td>{{ t.confirmada ? 'Sim' : 'Não' }}</td>
+  <td>{{ t.dataVencimento }}</td>
+  <td>{{ t.dataPagamento }}</td>
+  <td>
+  {{ t.tipo === 'DESPESA' ? (t.paga ? 'Sim' : 'Não') : '-' }}
+</td>
+<td>
+  <!-- Confirmar pagamento - despesas -->
+  <button
+    *ngIf="t.tipo === 'DESPESA' && !t.paga"
+    class="btn-confirmar-pagamento"
+    (click)="abrirModalConfirmacao(t)"
+    title="Confirmar pagamento da despesa"
+  >
+    <i class="fas fa-check"></i>
+  </button>
+
+  <!-- Confirmar recebimento - receitas -->
+  <button
+    *ngIf="t.tipo === 'RECEITA' && !t.confirmada"
+    class="btn-confirmar-recebimento"
+    (click)="confirmarRecebimento(t)"
+    title="Confirmar recebimento da receita"
+  >
+    <i class="fas fa-hand-holding-dollar"></i>
+  </button>
+  
+</td>
+      <td>
+        <button class="btn-editar" title="Editar" (click)="abrirModalEditar(t)">
+          <i class="fa fa-pencil" aria-hidden="true"></i> Editar
+        </button>
+      </td>
+</tr>
+
     </tbody>
   </table>
 </div>
@@ -80,6 +111,55 @@
       <div class="modal-actions">
         <button type="submit">Salvar</button>
         <button type="button" (click)="fecharModalDespesa()">Cancelar</button>
+      </div>
+    </form>
+  </div>
+</div>
+<div class="modal-overlay" *ngIf="mostrarModalConfirmar">
+  <div class="modal-content">
+    <h2>Confirmar Pagamento</h2>
+    <p>Deseja realmente confirmar o pagamento da despesa <strong>"{{ transacaoParaConfirmar?.descricao }}"</strong>?</p>
+    <div class="modal-actions">
+      <button (click)="confirmarPagamento()">Confirmar</button>
+      <button (click)="fecharModalConfirmar()">Cancelar</button>
+    </div>
+  </div>
+</div>
+
+
+<div *ngIf="mostrarModalEditar" class="modal-overlay">
+  <div class="modal-content">
+    <h2>Editar Transação</h2>
+    <form (ngSubmit)="salvarEdicao()">
+      <label>Descrição:</label>
+      <input [(ngModel)]="transacaoEditada.descricao" name="descricao" required />
+
+      <label>Valor:</label>
+      <input type="number" [(ngModel)]="transacaoEditada.valor" name="valor" required />
+
+
+
+      <label>Data Prevista Recebimento:</label>
+      <input type="date" [(ngModel)]="transacaoEditada.dataPrevistaRecebimento" name="dataPrevistaRecebimento" />
+
+      <label>Data Recebida:</label>
+      <input type="date" [(ngModel)]="transacaoEditada.dataRecebida" name="dataRecebida" />
+
+      <label>Confirmada:</label>
+      <input type="checkbox" [(ngModel)]="transacaoEditada.confirmada" name="confirmada" />
+
+      <label>Data Vencimento:</label>
+      <input type="date" [(ngModel)]="transacaoEditada.dataVencimento" name="dataVencimento" />
+
+      <label>Data Pagamento:</label>
+      <input type="date" [(ngModel)]="transacaoEditada.dataPagamento" name="dataPagamento" />
+
+      <label *ngIf="transacaoEditada.tipo === 'DESPESA'">Paga:</label>
+      <input *ngIf="transacaoEditada.tipo === 'DESPESA'" type="checkbox" [(ngModel)]="transacaoEditada.paga" name="paga" />
+
+      <div class="modal-actions">
+        <button type="submit">Salvar</button>
+        <button type="button" (click)="fecharModalEditar()">Cancelar</button>
       </div>
     </form>
   </div>
