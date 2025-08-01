@@ -299,5 +299,59 @@ this.http.put(
   }
 });
 }
+filtro = {
+  tipo: '',
+  descricao: '',
+  dataVencimentoInicio: '',
+  dataVencimentoFim: '',
+  dataPagamentoInicio: '',
+  dataPagamentoFim: '',
+  dataPrevistaInicio: '',
+  dataPrevistaFim: '',
+  dataRecebimentoInicio: '',
+  dataRecebimentoFim: '',
+  paga: '',
+  valorMin: '',
+  valorMax: ''
+};
 
+aplicarFiltros() {
+  const token = localStorage.getItem('token');
+  const headers = new HttpHeaders({
+    Authorization: `Bearer ${token}`,
+    'Content-Type': 'application/json'
+  });
+
+  // Cria novo objeto contendo apenas os filtros preenchidos
+  const filtrosLimpos: any = Object.fromEntries(
+    Object.entries(this.filtro).filter(([_, valor]) => valor !== null && valor !== '')
+  );
+
+  this.http.post<Transacao[]>('http://localhost:8080/transacoes/filtrar', filtrosLimpos, { headers })
+    .subscribe({
+      next: data => this.transacoes = data,
+      error: err => {
+        console.error('Erro ao filtrar transações:', err);
+      }
+    });
+}
+
+limparFiltros() {
+  this.filtro = {
+    tipo: '',
+    descricao: '',
+    dataVencimentoInicio: '',
+    dataVencimentoFim: '',
+    dataPagamentoInicio: '',
+    dataPagamentoFim: '',
+    dataPrevistaInicio: '',
+    dataPrevistaFim: '',
+    dataRecebimentoInicio: '',
+    dataRecebimentoFim: '',
+    paga: '',
+    valorMin: '',
+    valorMax: ''
+  };
+  this.aplicarFiltros();
+}
 }

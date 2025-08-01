@@ -6,6 +6,94 @@
     <button (click)="logout()">Logout</button>
   </div>
 </header>
+<section class="filtros-container">
+  <form (ngSubmit)="aplicarFiltros()" class="filtros-grid">
+    <div class="filtro-item">
+      <label for="tipo">Tipo</label>
+      <select [(ngModel)]="filtro.tipo" name="tipo" id="tipo">
+        <option value="">Todos</option>
+        <option value="RECEITA">Receita</option>
+        <option value="DESPESA">Despesa</option>
+      </select>
+    </div>
+
+    <div class="filtro-item">
+      <label for="tipo">Paga?</label>
+      <select [(ngModel)]="filtro.paga" name="tipo" id="paga">
+        <option value="">Todos</option>
+        <option value="true">Sim </option>
+        <option value="false">Não</option>
+      </select>
+    </div>
+
+    <div class="filtro-item">
+     <label for="valorMin">Valor Mínimo</label>
+     <input type="number" [(ngModel)]="filtro.valorMin" name="valorMin" id="valorMin" step="0.01" placeholder="Ex: 100.00" />
+    </div>
+
+  <div class="filtro-item">
+    <label for="valorMax">Valor Máximo</label>
+    <input type="number" [(ngModel)]="filtro.valorMax" name="valorMax" id="valorMax" step="0.01" placeholder="Ex: 1000.00" />
+  </div>
+
+    <div class="filtro-item">
+      <label for="descricao">Descrição</label>
+      <input type="text" [(ngModel)]="filtro.descricao" name="descricao" id="descricao" placeholder="Ex: Aluguel, Salário..." />
+    </div>
+
+    <div class="filtro-item">
+      <label for="dataVencimentoInicio">Data Vencimento Inicio</label>
+      <input type="date" [(ngModel)]="filtro.dataVencimentoInicio" name="dataVencimentoInicio" id="dataVencimentoInicio" />
+    </div>
+
+    <div class="filtro-item">
+      <label for="dataVencimentoFim">Data Vencimento Fim</label>
+      <input type="date" [(ngModel)]="filtro.dataVencimentoFim" name="dataVencimentoFim" id="dataVencimentoFim" />
+    </div>
+
+    <div class="filtro-item">
+      <label for="dataPagamentoInicio">Data Pagamento Inicio</label>
+      <input type="date" [(ngModel)]="filtro.dataPagamentoInicio" name="dataVencimentoInicio" id="dataPagamentoInicio" />
+    </div>
+
+    <div class="filtro-item">
+      <label for="dataPagamentoFim">Data Pagamento Fim</label>
+      <input type="date" [(ngModel)]="filtro.dataPagamentoFim" name="dataPagamentoFim" id="dataPagamentoFim" />
+    </div>
+  
+    <div class="filtro-item">
+      <label for="dataPrevistaInicio">Data Prevista de Recebimento Inicio</label>
+      <input type="date" [(ngModel)]="filtro.dataPrevistaInicio" name="dataPrevistaInicio" id="dataPrevistaInicio" />
+    </div>
+
+    <div class="filtro-item">
+      <label for="dataPrevistaFim"> Data Prevista de Recebimento Fim</label>
+      <input type="date" [(ngModel)]="filtro.dataPrevistaFim" name="dataPrevistaFim" id="dataPrevistaFim" />
+    </div>
+
+    <div class="filtro-item">
+      <label for="dataRecebimentoInicio">Data de Recebimento Inicio</label>
+      <input type="date" [(ngModel)]="filtro.dataRecebimentoInicio" name="dataRecebimentoInicio" id="dataRecebimentoInicio" />
+    </div>
+
+    <div class="filtro-item">
+      <label for="dataRecebimentoFim"> Data  de Recebimento Fim</label>
+      <input type="date" [(ngModel)]="filtro.dataRecebimentoFim" name="dataRecebimentoFim" id="dataRecebimentoFim" />
+    </div>
+
+    
+
+    <div class="botoes-filtro">
+      <button type="submit" class="btn btn-filtrar">
+        <i class="fas fa-filter"></i> Filtrar
+      </button>
+      <button type="button" class="btn btn-limpar" (click)="limparFiltros()">
+        <i class="fas fa-times-circle"></i> Limpar
+      </button>
+    </div>
+  </form>
+</section>
+
 
 <div class="table-container">
   <table>
