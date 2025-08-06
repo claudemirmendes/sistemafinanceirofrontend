@@ -109,6 +109,8 @@
         <th>Data Pagamento</th>
         <th>Paga</th>
         <th>Ações</th>
+        <th> - </th>
+
       </tr>
     </thead>
     <tbody>
@@ -136,14 +138,14 @@
   </button>
 
   <!-- Confirmar recebimento - receitas -->
-  <button
-    *ngIf="t.tipo === 'RECEITA' && !t.confirmada"
-    class="btn-confirmar-recebimento"
-    (click)="confirmarRecebimento(t)"
-    title="Confirmar recebimento da receita"
-  >
-    <i class="fas fa-hand-holding-dollar"></i>
-  </button>
+<button
+  *ngIf="t.tipo === 'RECEITA' && !t.confirmada"
+  class="btn-confirmar-recebimento"
+  (click)="abrirModalRecebimento(t)"
+  title="Confirmar recebimento da receita"
+>
+  <i class="fas fa-hand-holding-dollar"></i>
+</button>
   
 </td>
       <td>
@@ -203,16 +205,38 @@
     </form>
   </div>
 </div>
-<div class="modal-overlay" *ngIf="mostrarModalConfirmar">
+<div class="modal-overlay" *ngIf="mostrarModalRecebimento">
   <div class="modal-content">
-    <h2>Confirmar Pagamento</h2>
-    <p>Deseja realmente confirmar o pagamento da despesa <strong>"{{ transacaoParaConfirmar?.descricao }}"</strong>?</p>
+    <h2>Confirmar Recebimento</h2>
+    <p>Informe a data de recebimento da receita <strong>"{{ transacaoParaConfirmar?.descricao }}"</strong>:</p>
+
+    <input type="date" [(ngModel)]="dataRecebimento" required />
+
     <div class="modal-actions">
-      <button (click)="confirmarPagamento()">Confirmar</button>
-      <button (click)="fecharModalConfirmar()">Cancelar</button>
+      <button (click)="confirmarRecebimentoFinal()">Confirmar</button>
+      <button (click)="fecharModalRecebimento()">Cancelar</button>
     </div>
   </div>
 </div>
+
+
+<div class="modal-overlay" *ngIf="mostrarModalConfirmar">
+  <div class="modal-content">
+    <h2>Confirmar Pagamento</h2>
+    <p>Informe a data de pagamento da despesa <strong>"{{ transacaoParaConfirmar?.descricao }}"</strong>:</p>
+
+    <input type="date" [(ngModel)]="dataPagamento" required />
+
+    <div class="modal-actions">
+      <button (click)="confirmarPagamementoFinal()">Confirmar</button>
+      <button (click)="fecharModalRecebimento()">Cancelar</button>
+    </div>
+  </div>
+</div>
+
+
+
+
 
 
 <div *ngIf="mostrarModalEditar" class="modal-overlay">

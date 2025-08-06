@@ -135,7 +135,7 @@ transacaoParaConfirmar: Transacao | null = null;
 
     salvarDespesa() {
     const token = localStorage.getItem('token');
-    console.log(this.novaDespesa)
+    alert(this.novaDespesa)
     if (!token) {
       this.logout();
       return;
@@ -157,6 +157,8 @@ transacaoParaConfirmar: Transacao | null = null;
         }
       });
   }
+
+  
   abrirModalConfirmacao(transacao: Transacao) {
   this.transacaoParaConfirmar = transacao;
   this.mostrarModalConfirmar = true;
@@ -166,76 +168,90 @@ fecharModalConfirmar() {
   this.mostrarModalConfirmar = false;
   this.transacaoParaConfirmar = null;
 }
+dataPagamento: string = '';
 
-confirmarPagamento() {
-  const token = localStorage.getItem('token');
-  if (!token || !this.transacaoParaConfirmar) {
-    this.logout();
+mostrarModalRecebimento: boolean = false;
+
+dataRecebimento: string = '';
+
+
+abrirModalRecebimento(transacao: any) {
+  this.transacaoParaConfirmar = transacao;
+  this.dataRecebimento = ''; // limpa campo
+  this.mostrarModalRecebimento = true;
+}
+
+confirmarPagamementoFinal() {
+  if (!this.dataPagamento) {
+    Swal.fire('Erro', 'Informe a data de pagamento.', 'warning');
     return;
   }
 
+  const token = localStorage.getItem('token');
   const headers = new HttpHeaders({
-    Authorization: `Bearer ${token}`,
-    'Content-Type': 'application/json'
+    Authorization: `Bearer ${token}`
   });
 
-  this.http.put(
-    `http://localhost:8080/transacoes/${this.transacaoParaConfirmar.id}/confirmar-pagamento`,
-    {},
-    { headers }
-  ).subscribe({
-    next: () => {
-      this.transacaoParaConfirmar = null;
-      this.mostrarModalConfirmar = false;
-        Swal.fire({
-          icon: 'success',
-          title: 'Sucesso',
-          text: 'Pagamento confirmado com sucesso.',
-          confirmButtonColor: '#3085d6'
-        });
-      this.loadTransacoes();
-    },
-    error: err => {
-      const msg = err?.error?.erro || 'Erro ao confirmar pagamento.';
-        Swal.fire({
-          icon: 'error',
-          title: 'Erro',
-          text: msg,
-          confirmButtonColor: '#d33'
-        });
-    }
+  const body = {
+    dataPagamento: this.dataPagamento
+  };
+
+  this.http.put(`http://localhost:8080/transacoes/${this.transacaoParaConfirmar?.id}/confirmar-pagamento`, body, { headers })
+    .subscribe({
+      next: () => {
+  Swal.fire('Sucesso!', 'Pagamento confirmado com sucesso.', 'success')
+    .then(() => {
+      this.fecharModalConfirmar(); // callback após usuário fechar o alerta
+    });
+
+  this.mostrarModalConfirmar = false;
+  this.loadTransacoes();
+},
+      error: (err) => {
+        console.error('Erro ao confirmar pagamento:', err);
+        Swal.fire('Erro!', 'Erro ao confirmar pagamento.', 'error');
+      }
+    });
+}
+confirmarRecebimentoFinal() {
+  if (!this.dataRecebimento) {
+    Swal.fire('Erro', 'Informe a data de recebimento.', 'warning');
+    return;
+  }
+
+  const token = localStorage.getItem('token');
+  const headers = new HttpHeaders({
+    Authorization: `Bearer ${token}`
   });
+
+  const body = {
+    dataRecebimento: this.dataRecebimento
+  };
+
+  this.http.put(`http://localhost:8080/transacoes/${this.transacaoParaConfirmar?.id}/confirmar-recebimento`, body, { headers })
+    .subscribe({
+      next: () => {
+  Swal.fire('Sucesso!', 'Recebimento confirmado com sucesso.', 'success')
+    .then(() => {
+      this.fecharModalRecebimento(); // callback após usuário fechar o alerta
+    });
+
+  this.mostrarModalRecebimento = false;
+  this.loadTransacoes();
+},
+      error: (err) => {
+        console.error('Erro ao confirmar recebimento:', err);
+        Swal.fire('Erro!', 'Erro ao confirmar recebimento.', 'error');
+      }
+    });
 }
 
-confirmarRecebimento(transacao: Transacao) {
-  Swal.fire({
-    title: 'Confirmar Recebimento?',
-    text: 'Você deseja realmente confirmar o recebimento desta receita?',
-    icon: 'question',
-    showCancelButton: true,
-    confirmButtonText: 'Sim, confirmar',
-    cancelButtonText: 'Cancelar'
-  }).then((result) => {
-    if (result.isConfirmed) {
-      const token = localStorage.getItem('token');
-      const headers = new HttpHeaders({
-        Authorization: `Bearer ${token}`
-      });
-
-      this.http.put(`http://localhost:8080/transacoes/${transacao.id}/confirmar-recebimento`, {}, { headers })
-        .subscribe({
-          next: () => {
-            Swal.fire('Sucesso!', 'Recebimento confirmado com sucesso.', 'success');
-            this.loadTransacoes();
-          },
-          error: (err) => {
-            console.error('Erro ao confirmar recebimento:', err);
-            Swal.fire('Erro!', 'Erro ao confirmar recebimento.', 'error');
-          }
-        });
-    }
-  });
+fecharModalRecebimento() {
+  this.mostrarModalConfirmar = false;
+  this.transacaoParaConfirmar = null;
+  this.dataRecebimento = '';
 }
+
 mostrarModalEditar = false;
 transacaoEditada: Transacao = {
   id: 0, // não: id: number
@@ -254,6 +270,9 @@ abrirModalEditar(transacao: Transacao) {
   this.transacaoEditada = { ...transacao };
   this.mostrarModalEditar = true;
 }
+
+
+
 
 fecharModalEditar() {
   this.mostrarModalEditar = false;
