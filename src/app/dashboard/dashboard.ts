@@ -294,30 +294,32 @@ salvarEdicao() {
     alert('Transação sem ID para atualização');
     return;
   }
-const {
-  id,
-  tipo, // ← excluído do corpo
-  ...dadosAtualizacao
-} = this.transacaoEditada;
 
-this.http.put(
-  `http://localhost:8080/transacoes/${id}/atualizar`,
-  dadosAtualizacao,
-  { headers }
-).subscribe({
-  next: () => {
-    Swal.fire('Sucesso!', `${tipo} atualizada com sucesso`, 'success');
-   
-    this.fecharModalEditar();
-    this.loadTransacoes();
-  },
-  error: (err) => {
-    console.error('Erro ao atualizar transação:', err);
-    alert(err?.error || '');
-     Swal.fire('Erro!', 'Erro ao atualizar transação', 'error');
-  }
-});
+  const {
+    id,
+    tipo, // excluído do corpo para evitar alterar no backend
+    ...dadosAtualizacao
+  } = this.transacaoEditada;
+
+  this.http.put<Transacao>(
+    `http://localhost:8080/transacoes/${id}/atualizar`,
+    dadosAtualizacao,
+    { headers }
+  ).subscribe({
+    next: (transacaoAtualizada) => {
+      Swal.fire('Sucesso!', `${tipo} atualizada com sucesso`, 'success');
+      console.log('Transação atualizada:', transacaoAtualizada);
+      this.fecharModalEditar();
+      this.loadTransacoes();
+    },
+    error: (err) => {
+      console.error('Erro ao atualizar transação:', err);
+      alert(err?.error || '');
+      Swal.fire('Erro!', 'Erro ao atualizar transação', 'error');
+    }
+  });
 }
+
 filtro = {
   tipo: '',
   descricao: '',
